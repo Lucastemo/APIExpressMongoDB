@@ -1,4 +1,17 @@
 import express from "express";
+import conectaNaDatabase from "../config/dbConnect.js";
+import livro from "../models/Livro.js";
+
+const conexao = await conectaNaDatabase()
+
+conexao.on("error", erro => {
+    console.error("Ocorreu um erro ao tentar se conectar com o banco de dados:", erro);
+});
+
+conexao.once("open", () =>{
+    console.log("Conexão com o banco de dados feita com sucesso!");
+});
+
 const app = express();
 app.use(express.json());
 
@@ -21,8 +34,9 @@ app.get("/", (req, res) =>{
     res.status(200).send("Seja bem vindo à API! :D Tente ir para /livros, é bem legal.");
 })
 
-app.get("/livros", (req, res) =>{
-    res.status(200).json(livros);
+app.get("/livros", async (req, res) =>{
+    const listaLivros = await livro.find({});
+    res.status(200).json(listaLivros);
 })
 
 app.get("/livros/:id", (req, res) =>{
