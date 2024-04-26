@@ -69,12 +69,22 @@ class LivroController {
         }
     }
 
-    static async buscarLivrosPorEditora(req, res, next){
+    static async buscarLivrosPorFiltro(req, res, next){
         try {
-            const editora = req.query.editora;
-            const livrosEncontrados = await livro.find({ editora: editora });
+            const { editora, titulo, minpaginas, maxpaginas } = req.query;
+
+            const busca = {};
+            if(editora) busca.editora = editora;
+            if(titulo) busca.titulo = { $regex: titulo, $options: "i" };
+            if(minpaginas || maxpaginas) {
+                busca.paginas = {};
+                if(minpaginas) busca.paginas.$gte = minpaginas;
+                if(maxpaginas) busca.paginas.$lte = maxpaginas;
+            }
+
+            const livrosEncontrados = await livro.find(busca);
             if(livrosEncontrados.length === 0){
-                next(new Erro404("A editora não possui nenhum livro"));
+                next(new Erro404("Nenhum livro foi encontrado"));
                 return;
             }
             res.status(200).json(livrosEncontrados);
