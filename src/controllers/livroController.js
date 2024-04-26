@@ -1,6 +1,6 @@
 import express from "express";
-import livro from "../models/Livro.js";
-import { autor } from "../models/Autor.js"
+import { livro } from "../models/index.js";
+import { autor } from "../models/index.js"
 import Erro404 from "../erros/Erro404.js";
 import ErroValidacao from "../erros/ErroValidacao.js";
 
@@ -37,7 +37,7 @@ class LivroController {
             }
             const livroCriado = await livro.create(infoLivro);
             livroCriado.autor = autores;
-            res.status(201).json({ message: "Livro adicionado com sucesso", livro: livroCriado });
+            res.status(201).json({ mensagem: "Livro adicionado com sucesso", livro: livroCriado });
         } catch (erro) {
             next(erro);
         }
@@ -50,7 +50,7 @@ class LivroController {
                 next(new Erro404("Livro não encontrado"));
                 return;
             }
-            res.status(200).json({ message: "Livro Atualizado com Sucesso" });
+            res.status(200).json({ mensagem: "Livro Atualizado com Sucesso" });
         } catch (erro) {
             next(erro);
         }
@@ -63,7 +63,7 @@ class LivroController {
                 next(new Erro404("Livro não encontrado"));
                 return;
             }
-            res.status(200).json({ message: "Livro Deletado com Sucesso" });
+            res.status(200).json({ mensagem: "Livro Deletado com Sucesso" });
         } catch (erro) {
             next(erro);
         }

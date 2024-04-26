@@ -1,5 +1,5 @@
 import express from "express";
-import { autor } from "../models/Autor.js";
+import { autor } from "../models/index.js";
 import Erro404 from "../erros/Erro404.js";
 
 class AutoresController {
@@ -28,7 +28,7 @@ class AutoresController {
     static async adicionarAutor(req, res, next){
         try {
             const autorAdicionado = await autor.create(req.body);
-            res.status(201).json({ message: "Autor adicionado com sucesso", autor: autorAdicionado });
+            res.status(201).json({ mensagem: "Autor adicionado com sucesso", autor: autorAdicionado });
         } catch (erro) {
             next(erro);
         }
@@ -41,7 +41,7 @@ class AutoresController {
                 next(new Erro404("Autor não encontrado"))
                 return;
             }
-            res.status(200).json({ message: "Autor Atualizado com Sucesso" });
+            res.status(200).json({ mensagem: "Autor Atualizado com Sucesso" });
         } catch (erro) {
             next(erro);
         }
@@ -54,7 +54,7 @@ class AutoresController {
                 next(new Erro404("Autor não encontrado"));
                 return;
             }
-            res.status(200).json({ message: "Autor Deletado com Sucesso" });
+            res.status(200).json({ mensagem: "Autor Deletado com Sucesso" });
         } catch (erro) {
             next(erro);
         }
