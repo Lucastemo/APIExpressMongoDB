@@ -5,8 +5,9 @@ import Erro404 from "../erros/Erro404.js";
 class AutoresController {
     static async listarAutores(req, res, next){
         try{
-            const listaAutores = await autor.find({});
-            res.status(200).json(listaAutores);
+            const listaAutores = autor.find({});
+            req.resultado = listaAutores;
+            next();
         }catch(erro){
             next(erro);
         }

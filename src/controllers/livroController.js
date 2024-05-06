@@ -2,12 +2,14 @@ import express from "express";
 import { livro, autor } from "../models/index.js";
 import Erro404 from "../erros/Erro404.js";
 import ErroValidacao from "../erros/ErroValidacao.js";
+import ErroBadRequest from "../erros/ErroBadRequest.js";
 
 class LivroController {
     static async listarLivros(req, res, next){
         try{
-            const listaLivros = await livro.find({}).populate("autor").exec();
-            res.status(200).json(listaLivros);
+            const listaLivros = livro.find({}).populate("autor");
+            req.resultado = listaLivros;
+            next();
         }catch(erro){
             next(erro);
         }
@@ -73,12 +75,9 @@ class LivroController {
             const busca = await configurarBusca(req.query);
 
             if(busca !== null){
-                const livrosEncontrados = await livro.find(busca).populate("autor").exec();
-                if(livrosEncontrados.length === 0){
-                    next(new Erro404("Nenhum livro foi encontrado"));
-                    return;
-                }
-                res.status(200).json(livrosEncontrados);
+                const livrosEncontrados = livro.find(busca).populate("autor");
+                req.resultado = livrosEncontrados;
+                next();
             }else{
                 res.status(200).json([]);
             }

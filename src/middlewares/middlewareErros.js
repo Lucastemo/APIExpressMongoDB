@@ -12,7 +12,7 @@ function middlewareErros(erro, req, res, next){
         new ErroBadRequest().enviarResposta(res);
     }else if(erro instanceof mongoose.Error.ValidationError || erro instanceof ErroValidacao){
         new ErroValidacao(erro).enviarResposta(res);
-    }else if(erro instanceof Erro404){
+    }else if(erro instanceof ErroBase){
         erro.enviarResposta(res);
     }else{
         new ErroBase().enviarResposta(res);
